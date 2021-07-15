@@ -63,7 +63,7 @@ public class DateUtils {
 	 * @param date2
 	 * @return
 	 */
-	public static boolean isMesmaData(Date date1, Date date2) {
+	public static boolean isSameDate(Date date1, Date date2) {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.setTime(date1);
 		Calendar calendar2 = Calendar.getInstance();

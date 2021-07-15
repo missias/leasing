@@ -19,7 +19,7 @@ public class LeasingService {
 		//Next day delivery
 		Date returnDate = new Date();
 		returnDate = DateUtils.addDays(returnDate, 1);
-		leasing.setRentDate(returnDate);
+		leasing.setReturnDate(returnDate);
 		
 		//Saving the location...
 		//TODO add method to save
@@ -28,6 +28,26 @@ public class LeasingService {
 	}
 
 	public static void main(String[] args) {
+		/*
+		 * principles of test FIRST
+		(F)ast
+		(I)dependent
+		(R)epeatable
+		(S)elf-Verifying
+		(T)imely
+		*/
+		 //scenario
+		LeasingService service = new LeasingService();
+		User user = new User("user");
+		Movie movie = new Movie("movie 1", 1, 5.0);
+		
+		// action 
+		
+		Leasing leasing = service.alugarFilme(user, movie);
+		 //validation
+		System.out.println(leasing.getValue() == 5.0);
+		System.out.println(DateUtils.isSameDate(leasing.getRentDate() , new Date()));
+		System.out.println(DateUtils.isSameDate(leasing.getReturnDate() , DateUtils.getDateWitDifferenceOfDays(1) )  );
 		
 	}
 }
