@@ -5,12 +5,15 @@ import static br.jose.missias.utils.DateUtils.isSameDate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
+import org.junit.rules.ExpectedException;
 
 import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
@@ -29,6 +32,9 @@ public class LeasingServiceTest {
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
 	
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+	
 	
 	@Test
 	public void leasingTest() throws Exception {
@@ -36,11 +42,11 @@ public class LeasingServiceTest {
 		 //scenario
 		LeasingService service = new LeasingService();
 		User user = new User("user");
-		Movie movie = new Movie("movie 1", 1, 5.0);
+		Movie movie = new Movie("movie 1", 2, 5.0);
 		
 		// action 
 		
-		Leasing leasing = service.alugarFilme(user, movie);
+		Leasing leasing = service.rentMovie(user, movie);
 		
 		//validation
 		
@@ -58,4 +64,71 @@ public class LeasingServiceTest {
 		
 		
 	}
+	
+	/*
+	 * elegant approach
+	 */
+	@Test(expected=Exception.class)
+	public void leasingTest_withoutStock() throws Exception {
+		
+		 //scenario
+		LeasingService service = new LeasingService();
+		User user = new User("user");
+		Movie movie = new Movie("movie 1", 0, 5.0);
+		
+		// action 
+		
+			service.rentMovie(user, movie);
+		
+		//validation
+		
+	}
+	
+	/*
+	 * robust approach
+	 */
+	@Test
+	public void leasingTest_withoutStock_2()   {
+		
+		 //scenario
+		LeasingService service = new LeasingService();
+		User user = new User("user");
+		Movie movie = new Movie("movie 1", 0, 5.0);
+		
+		// action 
+		
+			try {
+				service.rentMovie(user, movie);
+				Assert.fail("Would have been thrown an exception");
+			} catch (Exception e) {
+				 assertThat(e.getMessage(), is("Movie without stock"));
+			}
+		
+		//validation
+		
+	}
+	
+	/*
+	 * Using a Rule to handle exceptions in tests
+	 */
+	
+	@Test 
+	public void leasingTest_withoutStock_3() throws Exception {
+		
+		 //scenario
+		LeasingService service = new LeasingService();
+		User user = new User("user");
+		Movie movie = new Movie("movie 1", 0, 5.0);
+		
+		exception.expect(Exception.class);
+		exception.expectMessage("Movie without stock");
+		// action 
+		
+			service.rentMovie(user, movie);
+		
+		//validation
+		
+	}
+	
+	
 }
