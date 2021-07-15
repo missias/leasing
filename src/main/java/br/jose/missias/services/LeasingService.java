@@ -6,6 +6,7 @@ import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
 import br.jose.missias.entities.User;
 import br.jose.missias.utils.DateUtils;
+ 
 
 public class LeasingService {
 	
@@ -27,27 +28,5 @@ public class LeasingService {
 		return leasing;
 	}
 
-	public static void main(String[] args) {
-		/*
-		 * principles of test FIRST
-		(F)ast
-		(I)dependent
-		(R)epeatable
-		(S)elf-Verifying
-		(T)imely
-		*/
-		 //scenario
-		LeasingService service = new LeasingService();
-		User user = new User("user");
-		Movie movie = new Movie("movie 1", 1, 5.0);
-		
-		// action 
-		
-		Leasing leasing = service.alugarFilme(user, movie);
-		 //validation
-		System.out.println(leasing.getValue() == 5.0);
-		System.out.println(DateUtils.isSameDate(leasing.getRentDate() , new Date()));
-		System.out.println(DateUtils.isSameDate(leasing.getReturnDate() , DateUtils.getDateWitDifferenceOfDays(1) )  );
-		
-	}
+
 }
