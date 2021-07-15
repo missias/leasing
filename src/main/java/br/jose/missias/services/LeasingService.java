@@ -10,7 +10,12 @@ import br.jose.missias.utils.DateUtils;
 
 public class LeasingService {
 	
-	public Leasing alugarFilme(User user, Movie movie) {
+	public Leasing alugarFilme(User user, Movie movie) throws Exception {
+		
+		if (movie.getStock() == 0) {
+			throw new Exception("Without stock");
+		}
+		
 		Leasing leasing = new Leasing();
 		leasing.setMovie(movie);
 		leasing.setUser(user);
