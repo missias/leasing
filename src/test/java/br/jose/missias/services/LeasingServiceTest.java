@@ -186,5 +186,24 @@ public class LeasingServiceTest {
 		
 		
 	}
+	
+	@Test 
+	public void shouldPayFiftyPercentOnFourthMovieRented() throws MovieWithoutStockException, LeasingException {
+		
+		 //scenario
+			User user = new User("user");
+			List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 4.0), 
+					new Movie("movie 2", 2, 4.0), new Movie("movie 3", 2, 4.0), 
+					new Movie("movie 3", 2, 4.0));
+		 //action
+		   Leasing	result = service.rentMovie(user, movies);
+			//4+4+3+2=14
+		 //validation
+		   
+		   assertThat(result.getValue(), is(13.0));
+		
+		
+	}
+	
 
 }

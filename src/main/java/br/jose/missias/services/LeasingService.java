@@ -47,6 +47,9 @@ public class LeasingService {
 			if (i==2) {
 				price = price *  0.75;
 			}
+			if (i==3) {
+				price = price *  0.50;
+			}
 			
 			totalAmount += price;
 		}
