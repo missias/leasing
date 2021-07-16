@@ -40,8 +40,15 @@ public class LeasingService {
 		leasing.setRentDate(new Date());
 		
 		Double totalAmount = 0d;
-		for (Movie movie : movies) {
-			totalAmount += movie.getRentPrice();
+		for (int i=0; i < movies.size(); i++) {
+			
+			Movie movie = movies.get(i);
+			Double price = movie.getRentPrice();
+			if (i==2) {
+				price = price *  0.75;
+			}
+			
+			totalAmount += price;
 		}
 		
 		leasing.setValue(totalAmount );
