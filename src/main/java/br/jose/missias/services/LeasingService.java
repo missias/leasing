@@ -44,20 +44,15 @@ public class LeasingService {
 			
 			Movie movie = movies.get(i);
 			Double price = movie.getRentPrice();
-			if (i==2) {
-				price = price *  0.75;
-			}
-			if (i==3) {
-				price = price *  0.50;
-			}
-			
-			if (i==4) {
-				price = price *  0.25;
+			switch(i) {
+			case 2: price = price *  0.75; break;
+			case 3: price = price *  0.50; break;
+			case 4:price = price *  0.25; break;
+			case 5: price = 0d;break;
+ 
 			}
 			
-			if (i==5) {
-				price = 0d;
-			}			
+ 		
 			
 			totalAmount += price;
 		}
