@@ -172,7 +172,7 @@ public class LeasingServiceTest {
 	}
 	
 	@Test
-	public void shouldPay75PercentOnThirdMovieAdded() throws MovieWithoutStockException, LeasingException {
+	public void shouldPay75PercentOfDiscountOnThirdMovieAdded() throws MovieWithoutStockException, LeasingException {
 		 //scenario
 			User user = new User("user");
 			List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 4.0), 
@@ -188,7 +188,7 @@ public class LeasingServiceTest {
 	}
 	
 	@Test 
-	public void shouldPayFiftyPercentOnFourthMovieRented() throws MovieWithoutStockException, LeasingException {
+	public void shouldPayFiftyPercentOFDiscountOnFourthMovieRented() throws MovieWithoutStockException, LeasingException {
 		
 		 //scenario
 			User user = new User("user");
@@ -204,6 +204,46 @@ public class LeasingServiceTest {
 		
 		
 	}
+	
+	@Test 
+	public void shouldPaySeventyFivePercentOFDiscountOnFifthMovieRented() throws MovieWithoutStockException, LeasingException {
+		
+		
+		 //scenario
+			User user = new User("user");
+			List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 4.0), 
+					new Movie("movie 2", 2, 4.0), new Movie("movie 3", 2, 4.0), 
+					new Movie("movie 3", 2, 4.0), new Movie("movie 3", 2, 4.0));
+		 //action
+		   Leasing	result = service.rentMovie(user, movies);
+			//4+4+3+2+1=14
+		 //validation
+		   
+		   assertThat(result.getValue(), is(14.0));
+		
+		
+	}
+	
+	@Test 
+	public void shouldPayOneHundredPercentOfDiscountOnFifthMovieRented() throws MovieWithoutStockException, LeasingException {
+		
+		
+		 //scenario
+			User user = new User("user");
+			List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 4.0), 
+					new Movie("movie 2", 2, 4.0), new Movie("movie 3", 2, 4.0), 
+					new Movie("movie 3", 2, 4.0), new Movie("movie 3", 2, 4.0));
+		 //action
+		   Leasing	result = service.rentMovie(user, movies);
+			//4+4+3+2+1+0=14
+		 //validation
+		   
+		   assertThat(result.getValue(), is(14.0));
+		
+		
+	}
+	
+	
 	
 
 }
