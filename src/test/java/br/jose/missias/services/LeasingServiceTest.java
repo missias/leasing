@@ -49,7 +49,7 @@ public class LeasingServiceTest {
 	}
 	
 	@Test
-	public void leasingTest() throws Exception {
+	public void shouldRentAMovie() throws Exception {
 
 		// scenario
 		
@@ -81,7 +81,7 @@ public class LeasingServiceTest {
 	 * elegant approach I prefer this one approach
 	 */
 	@Test(expected = MovieWithoutStockException.class)
-	public void leasingTest_withoutStock() throws Exception {
+	public void ShouldThrowAExceptionOnTryToRentMovieWithoutStock() throws Exception {
 
 		// scenario
 		User user = new User("user");
@@ -100,7 +100,7 @@ public class LeasingServiceTest {
 	 * This one is more complete
 	 */
 	@Test
-	public void leasingTest_withoutStock_2() {
+	public void ShouldThrowAExceptionOnTryToRentMovieWithoutStock_2() {
 
 		// scenario
 		User user = new User("user");
@@ -124,7 +124,7 @@ public class LeasingServiceTest {
 	 */
 
 	@Test
-	public void leasingTest_withoutStock_3() throws Exception {
+	public void ShouldThrowAExceptionOnTryToRentMovieWithoutStock_3() throws Exception {
 
 		// scenario
 		User user = new User("user");
@@ -141,7 +141,7 @@ public class LeasingServiceTest {
 	}
 
 	@Test
-	public void invalidUserTest() throws MovieWithoutStockException {
+	public void shouldNotRentAMovieWithoutUser() throws MovieWithoutStockException {
 		// scenario
 		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
 
@@ -159,7 +159,7 @@ public class LeasingServiceTest {
 	}
 
 	@Test
-	public void invalidMovieTest() throws MovieWithoutStockException, LeasingException {
+	public void shouldNoRentAMovieWithoutAMovie() throws MovieWithoutStockException, LeasingException {
 		 //scenario
 		User user = new User("user");
 		// action
@@ -168,9 +168,16 @@ public class LeasingServiceTest {
 		
 		service.rentMovie(user, null);
 		// validation
-		
-		
 
+	}
+	
+	@Test
+	public void shouldPay25PercentOnThirdMovieAdded() {
+		 //scenario
+		 //action
+		 //validation
+		
+		
 	}
 
 }
