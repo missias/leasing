@@ -1,11 +1,12 @@
 package br.jose.missias.entities;
 
 import java.util.Date;
+import java.util.List;
 
 public class Leasing {
 
 	private User user;
-	private Movie movie;
+	private List<Movie> movies;
 	private Date rentDate;
 	private Date returnDate;
 	private Double value;
@@ -18,12 +19,14 @@ public class Leasing {
 		this.user = user;
 	}
 
-	public Movie getMovie() {
-		return movie;
+ 
+
+	public List<Movie> getMovies() {
+		return movies;
 	}
 
-	public void setMovie(Movie movie) {
-		this.movie = movie;
+	public void setMovies(List<Movie> movies) {
+		this.movies = movies;
 	}
 
 	public Date getRentDate() {

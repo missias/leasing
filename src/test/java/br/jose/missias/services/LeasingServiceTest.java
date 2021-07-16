@@ -6,9 +6,13 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -31,18 +35,30 @@ public class LeasingServiceTest {
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
+	
+	private LeasingService service;
+	
+	@Before
+	public void setup() {
+		service = new LeasingService();
+	}
 
+	@After
+	public void tearDown() {
+		
+	}
+	
 	@Test
 	public void leasingTest() throws Exception {
 
 		// scenario
-		LeasingService service = new LeasingService();
+		
 		User user = new User("user");
-		Movie movie = new Movie("movie 1", 2, 5.0);
+		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
 
 		// action
 
-		Leasing leasing = service.rentMovie(user, movie);
+		Leasing leasing = service.rentMovie(user, movies);
 
 		// validation
 
@@ -68,13 +84,12 @@ public class LeasingServiceTest {
 	public void leasingTest_withoutStock() throws Exception {
 
 		// scenario
-		LeasingService service = new LeasingService();
 		User user = new User("user");
-		Movie movie = new Movie("movie 1", 0, 5.0);
+		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
 
 		// action
 
-		service.rentMovie(user, movie);
+		service.rentMovie(user, movies);
 
 		// validation
 
@@ -88,14 +103,13 @@ public class LeasingServiceTest {
 	public void leasingTest_withoutStock_2() {
 
 		// scenario
-		LeasingService service = new LeasingService();
 		User user = new User("user");
-		Movie movie = new Movie("movie 1", 0, 5.0);
+		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
 
 		// action
 
 		try {
-			service.rentMovie(user, movie);
+			service.rentMovie(user, movies);
 			Assert.fail("Would have been thrown an exception");
 		} catch (Exception e) {
 			assertThat(e.getMessage(), is("Movie without stock"));
@@ -113,15 +127,14 @@ public class LeasingServiceTest {
 	public void leasingTest_withoutStock_3() throws Exception {
 
 		// scenario
-		LeasingService service = new LeasingService();
 		User user = new User("user");
-		Movie movie = new Movie("movie 1", 0, 5.0);
+		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
 
 		exception.expect(Exception.class);
 		exception.expectMessage("Movie without stock");
 		// action
 
-		service.rentMovie(user, movie);
+		service.rentMovie(user, movies);
 
 		// validation
 
@@ -130,13 +143,12 @@ public class LeasingServiceTest {
 	@Test
 	public void invalidUserTest() throws MovieWithoutStockException {
 		// scenario
-		LeasingService service = new LeasingService();
-		Movie movie = new Movie("movie 1", 1, 5.0);
+		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
 
 		// action
 
 		try {
-			service.rentMovie(null, movie);
+			service.rentMovie(null, movies);
 			Assert.fail("Would have been thrown an exception");
 		} catch (LeasingException e) {
 			assertThat(e.getMessage(), is("invalid user"));
@@ -149,7 +161,6 @@ public class LeasingServiceTest {
 	@Test
 	public void invalidMovieTest() throws MovieWithoutStockException, LeasingException {
 		 //scenario
-		LeasingService service = new LeasingService();
 		User user = new User("user");
 		// action
 		exception.expect(LeasingException.class);

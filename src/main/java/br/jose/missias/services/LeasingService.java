@@ -1,6 +1,7 @@
 package br.jose.missias.services;
 
 import java.util.Date;
+import java.util.List;
 
 import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
@@ -13,26 +14,37 @@ import br.jose.missias.utils.DateUtils;
 public class LeasingService {
 	
  
-	public Leasing rentMovie(User user, Movie movie) throws MovieWithoutStockException,  LeasingException{
-		
-		if (movie == null) {
-			throw new LeasingException("invalid movie");
-		}
-		if (movie.getStock() == 0) {
-			throw new MovieWithoutStockException("Movie without stock");
-		}
+	public Leasing rentMovie(User user, List<Movie> movies) throws MovieWithoutStockException,  LeasingException{
 		
 		if (user == null) {
 			throw new LeasingException("invalid user");
 		}
 		
+		if ( (movies == null) || (movies.isEmpty())) {
+			throw new LeasingException("invalid movie");
+		}
+		
+		for (Movie movie : movies) {
+			if (movie.getStock() == 0) {
+				throw new MovieWithoutStockException("Movie without stock");
+			}
+		}
+		
+
+		
 		
 		
 		Leasing leasing = new Leasing();
-		leasing.setMovie(movie);
+		leasing.setMovies(movies);
 		leasing.setUser(user);
 		leasing.setRentDate(new Date());
-		leasing.setValue(movie.getRentPrice() );
+		
+		Double totalAmount = 0d;
+		for (Movie movie : movies) {
+			totalAmount += movie.getRentPrice();
+		}
+		
+		leasing.setValue(totalAmount );
 
 		//Next day delivery
 		Date returnDate = new Date();
