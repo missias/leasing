@@ -2,16 +2,20 @@ package br.jose.missias.services;
 
 import static br.jose.missias.utils.DateUtils.getDateWitDifferenceOfDays;
 import static br.jose.missias.utils.DateUtils.isSameDate;
+import static br.jose.missias.utils.DateUtils.verifyDayOfWeek;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,6 +27,7 @@ import br.jose.missias.entities.Movie;
 import br.jose.missias.entities.User;
 import br.jose.missias.exceptions.LeasingException;
 import br.jose.missias.exceptions.MovieWithoutStockException;
+import br.jose.missias.utils.DateUtils;
 
 public class LeasingServiceTest {
 	/*
@@ -51,6 +56,8 @@ public class LeasingServiceTest {
 	@Test
 	public void shouldRentAMovie() throws Exception {
 
+		Assume.assumeFalse(verifyDayOfWeek(new Date(), Calendar.SATURDAY));
+		
 		// scenario
 		
 		User user = new User("user");
@@ -232,7 +239,7 @@ public class LeasingServiceTest {
 			User user = new User("user");
 			List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 4.0), 
 					new Movie("movie 2", 2, 4.0), new Movie("movie 3", 2, 4.0), 
-					new Movie("movie 3", 2, 4.0), new Movie("movie 3", 2, 4.0));
+					new Movie("movie 3", 2, 4.0), new Movie("movie 3", 2, 4.0));;
 		 //action
 		   Leasing	result = service.rentMovie(user, movies);
 			//4+4+3+2+1+0=14
@@ -243,6 +250,25 @@ public class LeasingServiceTest {
 		
 	}
 	
+	@Test
+	public void ShouldReturnAmovieOnMondayIfRentOnSaturday() throws MovieWithoutStockException, LeasingException {
+		
+		Assume.assumeTrue(verifyDayOfWeek(new Date(), Calendar.SATURDAY));
+		
+		 //scenario
+			User user = new User("user");
+			
+			List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
+			
+
+		 //action
+		   Leasing	result = service.rentMovie(user, movies);
+			//4+4+3+2+1+0=14
+		 //validation
+		   boolean isMonday = verifyDayOfWeek(result.getReturnDate(), Calendar.MONDAY);
+		   assertTrue(isMonday);
+		
+	}
 	
 	
 

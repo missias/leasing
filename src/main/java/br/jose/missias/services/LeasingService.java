@@ -1,5 +1,9 @@
 package br.jose.missias.services;
 
+import static br.jose.missias.utils.DateUtils.addDays;
+import static br.jose.missias.utils.DateUtils.verifyDayOfWeek;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,10 +34,6 @@ public class LeasingService {
 			}
 		}
 		
-
-		
-		
-		
 		Leasing leasing = new Leasing();
 		leasing.setMovies(movies);
 		leasing.setUser(user);
@@ -47,12 +47,10 @@ public class LeasingService {
 			switch(i) {
 			case 2: price = price *  0.75; break;
 			case 3: price = price *  0.50; break;
-			case 4:price = price *  0.25; break;
-			case 5: price = 0d;break;
+			case 4: price = price *  0.25; break;
+			case 5: price = 0d; break;
  
 			}
-			
- 		
 			
 			totalAmount += price;
 		}
@@ -61,7 +59,13 @@ public class LeasingService {
 
 		//Next day delivery
 		Date returnDate = new Date();
-		returnDate = DateUtils.addDays(returnDate, 1);
+		returnDate = addDays(returnDate, 1);
+		
+		if(verifyDayOfWeek(returnDate, Calendar.SUNDAY)) {
+			returnDate = addDays(returnDate, 1);
+		}
+		
+		
 		leasing.setReturnDate(returnDate);
 		
 		//Saving the location...
