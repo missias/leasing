@@ -8,5 +8,8 @@ public class MatchersOwn {
 		return new DayOfWeekMatcher(dayOfWeek);
 	}
 	
+	public static DayOfWeekMatcher onMonday() {
+		return new DayOfWeekMatcher(Calendar.MONDAY);
+	}
 
 }
