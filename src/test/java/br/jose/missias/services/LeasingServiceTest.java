@@ -1,5 +1,6 @@
 package br.jose.missias.services;
 
+import static br.jose.missias.matchers.MatchersOwn.onDay;
 import static br.jose.missias.utils.DateUtils.getDateWitDifferenceOfDays;
 import static br.jose.missias.utils.DateUtils.isSameDate;
 import static br.jose.missias.utils.DateUtils.verifyDayOfWeek;
@@ -28,6 +29,7 @@ import br.jose.missias.entities.User;
 import br.jose.missias.exceptions.LeasingException;
 import br.jose.missias.exceptions.MovieWithoutStockException;
 import br.jose.missias.matchers.DayOfWeekMatcher;
+import br.jose.missias.matchers.MatchersOwn;
 import br.jose.missias.utils.DateUtils;
 
 public class LeasingServiceTest {
@@ -198,8 +200,9 @@ public class LeasingServiceTest {
 		  // boolean isMonday = verifyDayOfWeek(result.getReturnDate(), Calendar.MONDAY);
 		   //assertTrue(isMonday);
 		   
-		   
-		   assertThat(result.getReturnDate(), new DayOfWeekMatcher(Calendar.MONDAY) );
+		   //assertThat(result.getReturnDate(), new DayOfWeekMatcher(Calendar.MONDAY) );
+		   assertThat(result.getReturnDate(),  onDay(Calendar.MONDAY) );
+	 
 	}
 	
 	
