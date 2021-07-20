@@ -1,5 +1,6 @@
 package br.jose.missias.services;
 
+import static br.jose.missias.builders.UserBuilder.aUser;
 import static br.jose.missias.matchers.MatchersOwn.on;
 import static br.jose.missias.matchers.MatchersOwn.onMonday;
 import static br.jose.missias.utils.DateUtils.getDateWitDifferenceOfDays;
@@ -24,6 +25,7 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import br.jose.missias.builders.UserBuilder;
 import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
 import br.jose.missias.entities.User;
@@ -64,7 +66,8 @@ public class LeasingServiceTest {
 		
 		// scenario
 		
-		User user = new User("user");
+		User user = aUser().now();
+		
 		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
 
 		// action
@@ -99,7 +102,7 @@ public class LeasingServiceTest {
 	public void ShouldThrowAExceptionOnTryToRentMovieWithoutStock() throws Exception {
 
 		// scenario
-		User user = new User("user");
+		User user = aUser().now();
 		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
 
 		// action
@@ -118,7 +121,7 @@ public class LeasingServiceTest {
 	public void ShouldThrowAExceptionOnTryToRentMovieWithoutStock_2() {
 
 		// scenario
-		User user = new User("user");
+		User user = aUser().now();
 		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
 
 		// action
@@ -142,7 +145,7 @@ public class LeasingServiceTest {
 	public void ShouldThrowAExceptionOnTryToRentMovieWithoutStock_3() throws Exception {
 
 		// scenario
-		User user = new User("user");
+		User user = aUser().now();
 		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
 
 		exception.expect(Exception.class);
@@ -176,7 +179,7 @@ public class LeasingServiceTest {
 	@Test
 	public void shouldNoRentAMovieWithoutAMovie() throws MovieWithoutStockException, LeasingException {
 		 //scenario
-		User user = new User("user");
+		User user = aUser().now();
 		// action
 		exception.expect(LeasingException.class);
 		exception.expectMessage("invalid movie");
@@ -193,7 +196,7 @@ public class LeasingServiceTest {
 		Assume.assumeTrue(verifyDayOfWeek(new Date(), Calendar.SATURDAY));
 		
 		 //scenario
-			User user = new User("user");
+			User user = aUser().now();
 			
 			List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
 			
