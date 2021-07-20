@@ -1,5 +1,7 @@
 package br.jose.missias.services;
 
+import static br.jose.missias.builders.MovieBuilder.aMovie;
+import static br.jose.missias.builders.MovieBuilder.aMovieWithoutStock;
 import static br.jose.missias.builders.UserBuilder.aUser;
 import static br.jose.missias.matchers.MatchersOwn.on;
 import static br.jose.missias.matchers.MatchersOwn.onMonday;
@@ -25,6 +27,7 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import br.jose.missias.builders.MovieBuilder;
 import br.jose.missias.builders.UserBuilder;
 import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
@@ -68,7 +71,7 @@ public class LeasingServiceTest {
 		
 		User user = aUser().now();
 		
-		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
+		List<Movie> movies =  Arrays.asList( aMovie().withValue(5.0).now());
 
 		// action
 
@@ -103,7 +106,7 @@ public class LeasingServiceTest {
 
 		// scenario
 		User user = aUser().now();
-		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
+		List<Movie> movies =  Arrays.asList( aMovieWithoutStock().now());
 
 		// action
 
@@ -122,7 +125,7 @@ public class LeasingServiceTest {
 
 		// scenario
 		User user = aUser().now();
-		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
+		List<Movie> movies =  Arrays.asList( aMovie().withoutStock().now());
 
 		// action
 
@@ -146,7 +149,7 @@ public class LeasingServiceTest {
 
 		// scenario
 		User user = aUser().now();
-		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 0, 5.0));
+		List<Movie> movies =  Arrays.asList( aMovie().withoutStock().now());
 
 		exception.expect(Exception.class);
 		exception.expectMessage("Movie without stock");
@@ -161,7 +164,7 @@ public class LeasingServiceTest {
 	@Test
 	public void shouldNotRentAMovieWithoutUser() throws MovieWithoutStockException {
 		// scenario
-		List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
+		List<Movie> movies =  Arrays.asList( aMovie().now());
 
 		// action
 
@@ -198,7 +201,7 @@ public class LeasingServiceTest {
 		 //scenario
 			User user = aUser().now();
 			
-			List<Movie> movies =  Arrays.asList( new Movie("movie 1", 2, 5.0));
+			List<Movie> movies =  Arrays.asList(aMovie().now());
 			
 
 		 //action

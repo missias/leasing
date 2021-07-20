@@ -1,5 +1,6 @@
 package br.jose.missias.services;
 
+import static br.jose.missias.builders.MovieBuilder.aMovie;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -14,6 +15,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
+import br.jose.missias.builders.MovieBuilder;
 import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
 import br.jose.missias.entities.User;
@@ -46,13 +48,13 @@ public class CalculatorPriceRentTest {
 		service = new LeasingService();
 	}
 	
-	private static Movie m1 = new Movie("Movie 1", 2, 4.0);
-	private static Movie m2 = new Movie("Movie 2", 2, 4.0);
-	private static Movie m3 = new Movie("Movie 3", 2, 4.0);
-	private static Movie m4 = new Movie("Movie 4", 2, 4.0);
-	private static Movie m5 = new Movie("Movie 5", 2, 4.0);
-	private static Movie m6 = new Movie("Movie 6", 2, 4.0);
-	private static Movie m7 = new Movie("Movie 7", 2, 4.0);
+	private static Movie m1 = aMovie().now();
+	private static Movie m2 = aMovie().now();
+	private static Movie m3 = aMovie().now();
+	private static Movie m4 = aMovie().now();
+	private static Movie m5 = aMovie().now();
+	private static Movie m6 = aMovie().now();
+	private static Movie m7 = aMovie().now();
 	
 	@Parameters(name="Test  {2}")
 	public static Collection<Object[]> getParameters() {
