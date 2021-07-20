@@ -27,6 +27,7 @@ import br.jose.missias.entities.Movie;
 import br.jose.missias.entities.User;
 import br.jose.missias.exceptions.LeasingException;
 import br.jose.missias.exceptions.MovieWithoutStockException;
+import br.jose.missias.matchers.DayOfWeekMatcher;
 import br.jose.missias.utils.DateUtils;
 
 public class LeasingServiceTest {
@@ -194,9 +195,11 @@ public class LeasingServiceTest {
 		   Leasing	result = service.rentMovie(user, movies);
 			//4+4+3+2+1+0=14
 		 //validation
-		   boolean isMonday = verifyDayOfWeek(result.getReturnDate(), Calendar.MONDAY);
-		   assertTrue(isMonday);
-		
+		  // boolean isMonday = verifyDayOfWeek(result.getReturnDate(), Calendar.MONDAY);
+		   //assertTrue(isMonday);
+		   
+		   
+		   assertThat(result.getReturnDate(), new DayOfWeekMatcher(Calendar.MONDAY) );
 	}
 	
 	
