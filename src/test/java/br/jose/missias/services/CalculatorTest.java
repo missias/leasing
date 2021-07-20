@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import br.jose.missias.exceptions.ShouldNotDivideByZeroException;
 
-public class CalculadoraTest {
+public class CalculatorTest {
 	
 	private Calculator calc;
 	
