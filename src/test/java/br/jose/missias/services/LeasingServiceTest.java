@@ -89,10 +89,7 @@ public class LeasingServiceTest {
 		// Use error Collector when a method has more than an assertive
 
 		error.checkThat(leasing.getValue(), is(equalTo(5.0)));
-		//error.checkThat(isSameDate(leasing.getRentDate(), new Date()), is(true));
 		error.checkThat( leasing.getRentDate(), MatchersOwn.isToday());
-		
-		//error.checkThat(isSameDate(leasing.getReturnDate(), getDateWitDifferenceOfDays(1)), is(true));
 		error.checkThat( leasing.getReturnDate(), MatchersOwn.isTodayWitDifferenceOfDays(1));
 		
 
@@ -208,11 +205,7 @@ public class LeasingServiceTest {
 		   Leasing	result = service.rentMovie(user, movies);
 			//4+4+3+2+1+0=14
 		 //validation
-		  // boolean isMonday = verifyDayOfWeek(result.getReturnDate(), Calendar.MONDAY);
-		   //assertTrue(isMonday);
 		   
-		   //assertThat(result.getReturnDate(), new DayOfWeekMatcher(Calendar.MONDAY) );
-		   //assertThat(result.getReturnDate(),  onDay(Calendar.MONDAY) );
 		   assertThat(result.getReturnDate(),  onMonday() );
 		    
 	 
