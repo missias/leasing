@@ -1,6 +1,6 @@
 package br.jose.missias.services;
 
-import static br.jose.missias.matchers.MatchersOwn.onDay;
+import static br.jose.missias.matchers.MatchersOwn.on;
 import static br.jose.missias.matchers.MatchersOwn.onMonday;
 import static br.jose.missias.utils.DateUtils.getDateWitDifferenceOfDays;
 import static br.jose.missias.utils.DateUtils.isSameDate;
@@ -83,8 +83,12 @@ public class LeasingServiceTest {
 		// Use error Collector when a method has more than an assertive
 
 		error.checkThat(leasing.getValue(), is(equalTo(5.0)));
-		error.checkThat(isSameDate(leasing.getRentDate(), new Date()), is(true));
-		error.checkThat(isSameDate(leasing.getReturnDate(), getDateWitDifferenceOfDays(1)), is(true));
+		//error.checkThat(isSameDate(leasing.getRentDate(), new Date()), is(true));
+		error.checkThat( leasing.getRentDate(), MatchersOwn.isToday());
+		
+		//error.checkThat(isSameDate(leasing.getReturnDate(), getDateWitDifferenceOfDays(1)), is(true));
+		error.checkThat( leasing.getReturnDate(), MatchersOwn.isTodayWitDifferenceOfDays(1));
+		
 
 	}
 
