@@ -49,7 +49,9 @@ public class CalculatorPriceRentTest {
 	public void setup() {
 		service = new LeasingService();
 		LeasingDao dao = Mockito.mock(LeasingDao.class);
+		IndebtedService indebtedService = Mockito.mock(IndebtedService.class);
 		service.setDao(dao);		
+		service.setIndebtedService(indebtedService);
 	}
 	
 	private static Movie m1 = aMovie().now();

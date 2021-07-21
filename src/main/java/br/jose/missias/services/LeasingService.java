@@ -19,6 +19,7 @@ public class LeasingService {
 	
 	
 	private LeasingDao dao;
+	private IndebtedService indebtedService;
  
 	public Leasing rentMovie(User user, List<Movie> movies) throws MovieWithoutStockException,  LeasingException{
 		
@@ -34,6 +35,10 @@ public class LeasingService {
 			if (movie.getStock() == 0) {
 				throw new MovieWithoutStockException("Movie without stock");
 			}
+		}
+		
+		if (indebtedService.isIndebted(user)) {
+			throw new LeasingException("User is negativated");
 		}
 		
 		Leasing leasing = new Leasing();
@@ -79,6 +84,10 @@ public class LeasingService {
 		this.dao = dao;
 	}
 
+	public void setIndebtedService(IndebtedService indebtedService) {
+		this.indebtedService = indebtedService;
+	}
+	
 	
 
 

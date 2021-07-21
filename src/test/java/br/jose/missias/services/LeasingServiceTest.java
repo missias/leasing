@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -46,6 +47,8 @@ public class LeasingServiceTest {
 	 * (T)imely
 	 */
 
+	private IndebtedService indebtedService;
+	
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
 
@@ -58,7 +61,10 @@ public class LeasingServiceTest {
 	public void setup() {
 		service = new LeasingService();
 		LeasingDao dao = Mockito.mock(LeasingDao.class);
+		indebtedService = Mockito.mock(IndebtedService.class);
 		service.setDao(dao);
+		service.setIndebtedService(indebtedService);
+		
 	}
 
 	@After
@@ -215,6 +221,21 @@ public class LeasingServiceTest {
 	 
 	}
 	
-	
+	@Test
+	public void ShouldNotRentAmovieToDebtor() throws MovieWithoutStockException, LeasingException {
+		 //scenario
+			User user = aUser().now();
+			List<Movie> movies =  Arrays.asList(aMovie().now());
+			
+			when(indebtedService.isIndebted(user)).thenReturn(true);
+			
+		 //action
+			exception.expect(LeasingException.class);
+			exception.expectMessage("User is negativated");
+			
+			 Leasing	result = service.rentMovie(user, movies);
+		 //validation
+		
+	}
 
 }
