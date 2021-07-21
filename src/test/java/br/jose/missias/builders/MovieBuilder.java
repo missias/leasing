@@ -19,7 +19,7 @@ public class MovieBuilder {
 	
 	public static MovieBuilder aMovieWithoutStock() {
 		MovieBuilder builder = new MovieBuilder();
-		builder.movie = new Movie("Movie 1", 2, 4.0);
+		builder.movie = new Movie("Movie 1", 0, 4.0);
 		return builder;
 		
 	}

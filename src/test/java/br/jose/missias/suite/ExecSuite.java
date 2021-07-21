@@ -10,7 +10,7 @@ import br.jose.missias.services.CalculatorPriceRentTest;
 import br.jose.missias.services.CalculatorTest;
 import br.jose.missias.services.LeasingServiceTest;
 
-@RunWith(Suite.class)
+//@RunWith(Suite.class)
 @SuiteClasses({
 	CalculatorTest.class,
 	CalculatorPriceRentTest.class,
