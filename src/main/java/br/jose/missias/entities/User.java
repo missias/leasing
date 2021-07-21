@@ -7,7 +7,7 @@ public class User {
 	public User() {
 	}
 
-	public User(String nome) {
+	public User(String name) {
 		this.name = name;
 	}
 
@@ -42,6 +42,11 @@ public class User {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [name=" + name + "]";
 	}
 
 	

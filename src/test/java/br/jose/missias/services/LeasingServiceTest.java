@@ -1,5 +1,6 @@
 package br.jose.missias.services;
 
+import static br.jose.missias.builders.LeasingBuilder.aRent;
 import static br.jose.missias.builders.MovieBuilder.aMovie;
 import static br.jose.missias.builders.MovieBuilder.aMovieWithoutStock;
 import static br.jose.missias.builders.UserBuilder.aUser;
@@ -29,6 +30,7 @@ import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
+import br.jose.missias.builders.LeasingBuilder;
 import br.jose.missias.builders.MovieBuilder;
 import br.jose.missias.builders.UserBuilder;
 import br.jose.missias.dao.LeasingDao;
@@ -48,40 +50,44 @@ public class LeasingServiceTest {
 	 */
 
 	private IndebtedService indebtedService;
-	
+	private LeasingDao dao;
+	private EMailService emailService;
+
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
-	
+
 	private LeasingService service;
-	
+
 	@Before
 	public void setup() {
 		service = new LeasingService();
-		LeasingDao dao = Mockito.mock(LeasingDao.class);
+		dao = Mockito.mock(LeasingDao.class);
 		indebtedService = Mockito.mock(IndebtedService.class);
+		emailService = Mockito.mock(EMailService.class);
 		service.setDao(dao);
 		service.setIndebtedService(indebtedService);
-		
+		service.setEmailService(emailService);
+
 	}
 
 	@After
 	public void tearDown() {
-		
+
 	}
-	
+
 	@Test
 	public void shouldRentAMovie() throws Exception {
 
 		Assume.assumeFalse(verifyDayOfWeek(new Date(), Calendar.SATURDAY));
-		
+
 		// scenario
-		
+
 		User user = aUser().now();
-		
-		List<Movie> movies =  Arrays.asList( aMovie().withValue(5.0).now());
+
+		List<Movie> movies = Arrays.asList(aMovie().withValue(5.0).now());
 
 		// action
 
@@ -99,9 +105,8 @@ public class LeasingServiceTest {
 		// Use error Collector when a method has more than an assertive
 
 		error.checkThat(leasing.getValue(), is(equalTo(5.0)));
-		error.checkThat( leasing.getRentDate(), MatchersOwn.isToday());
-		error.checkThat( leasing.getReturnDate(), MatchersOwn.isTodayWitDifferenceOfDays(1));
-		
+		error.checkThat(leasing.getRentDate(), MatchersOwn.isToday());
+		error.checkThat(leasing.getReturnDate(), MatchersOwn.isTodayWitDifferenceOfDays(1));
 
 	}
 
@@ -113,7 +118,7 @@ public class LeasingServiceTest {
 
 		// scenario
 		User user = aUser().now();
-		List<Movie> movies =  Arrays.asList( aMovieWithoutStock().now());
+		List<Movie> movies = Arrays.asList(aMovieWithoutStock().now());
 
 		// action
 
@@ -124,15 +129,14 @@ public class LeasingServiceTest {
 	}
 
 	/*
-	 * robust approach
-	 * This one is more complete
+	 * robust approach This one is more complete
 	 */
 	@Test
 	public void ShouldThrowAExceptionOnTryToRentMovieWithoutStock_2() {
 
 		// scenario
 		User user = aUser().now();
-		List<Movie> movies =  Arrays.asList( aMovie().withoutStock().now());
+		List<Movie> movies = Arrays.asList(aMovie().withoutStock().now());
 
 		// action
 
@@ -156,7 +160,7 @@ public class LeasingServiceTest {
 
 		// scenario
 		User user = aUser().now();
-		List<Movie> movies =  Arrays.asList( aMovie().withoutStock().now());
+		List<Movie> movies = Arrays.asList(aMovie().withoutStock().now());
 
 		exception.expect(Exception.class);
 		exception.expectMessage("Movie without stock");
@@ -171,7 +175,7 @@ public class LeasingServiceTest {
 	@Test
 	public void shouldNotRentAMovieWithoutUser() throws MovieWithoutStockException {
 		// scenario
-		List<Movie> movies =  Arrays.asList( aMovie().now());
+		List<Movie> movies = Arrays.asList(aMovie().now());
 
 		// action
 
@@ -188,54 +192,70 @@ public class LeasingServiceTest {
 
 	@Test
 	public void shouldNoRentAMovieWithoutAMovie() throws MovieWithoutStockException, LeasingException {
-		 //scenario
+		// scenario
 		User user = aUser().now();
 		// action
 		exception.expect(LeasingException.class);
 		exception.expectMessage("invalid movie");
-		
+
 		service.rentMovie(user, null);
 		// validation
 
 	}
-	
 
 	@Test
 	public void ShouldReturnAmovieOnMondayIfRentOnSaturday() throws MovieWithoutStockException, LeasingException {
-		
-		Assume.assumeTrue(verifyDayOfWeek(new Date(), Calendar.SATURDAY));
-		
-		 //scenario
-			User user = aUser().now();
-			
-			List<Movie> movies =  Arrays.asList(aMovie().now());
-			
 
-		 //action
-		   Leasing	result = service.rentMovie(user, movies);
-			//4+4+3+2+1+0=14
-		 //validation
-		   
-		   assertThat(result.getReturnDate(),  onMonday() );
-		    
-	 
+		Assume.assumeTrue(verifyDayOfWeek(new Date(), Calendar.SATURDAY));
+
+		// scenario
+		User user = aUser().now();
+
+		List<Movie> movies = Arrays.asList(aMovie().now());
+
+		// action
+		Leasing result = service.rentMovie(user, movies);
+		// 4+4+3+2+1+0=14
+		// validation
+
+		assertThat(result.getReturnDate(), onMonday());
+
 	}
-	
+
 	@Test
-	public void ShouldNotRentAmovieToDebtor() throws MovieWithoutStockException, LeasingException {
-		 //scenario
-			User user = aUser().now();
-			List<Movie> movies =  Arrays.asList(aMovie().now());
-			
-			when(indebtedService.isIndebted(user)).thenReturn(true);
-			
-		 //action
-			exception.expect(LeasingException.class);
-			exception.expectMessage("User is negativated");
-			
-			 Leasing	result = service.rentMovie(user, movies);
-		 //validation
-		
+	public void ShouldNotRentAmovieToDebtor() throws MovieWithoutStockException {
+		// scenario
+		User user = aUser().now();
+		User user2 = aUser().withName("User 2").now();
+		List<Movie> movies = Arrays.asList(aMovie().now());
+
+		when(indebtedService.isIndebted(user)).thenReturn(true);
+
+		// action
+		try {
+			service.rentMovie(user, movies);
+			Assert.fail("Would have been thrown an exception");
+		} catch (LeasingException e) {
+			assertThat(e.getMessage(), is("User is negativated"));
+		}
+		// validation
+		Mockito.verify(indebtedService).isIndebted(user);
+
+	}
+
+	@Test
+	public void ShouldSendAnEmailToNotifyDelays() {
+		// scenario
+		User user = aUser().now();
+		User user2 = aUser().withName("User 2").now();
+		List<Leasing> leasings = Arrays
+				.asList(aRent().withUser(user).withReturnDate(getDateWitDifferenceOfDays(-2)).now());
+
+		when(dao.getPendingRents()).thenReturn(leasings);
+		// action
+		service.notifyDelays();
+		// validation
+		Mockito.verify(emailService).notifyDelays(user);
 	}
 
 }

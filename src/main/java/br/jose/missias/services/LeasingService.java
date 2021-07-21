@@ -20,6 +20,7 @@ public class LeasingService {
 	
 	private LeasingDao dao;
 	private IndebtedService indebtedService;
+	private EMailService emailService;
  
 	public Leasing rentMovie(User user, List<Movie> movies) throws MovieWithoutStockException,  LeasingException{
 		
@@ -80,12 +81,25 @@ public class LeasingService {
 		return leasing;
 	}
 
+	public void notifyDelays() {
+		List<Leasing> leasings = dao.getPendingRents();
+		for (Leasing leasing : leasings) {
+			emailService.notifyDelays(leasing.getUser());
+			
+			
+		}
+	}
+	
 	public void setDao(LeasingDao dao) {
 		this.dao = dao;
 	}
 
 	public void setIndebtedService(IndebtedService indebtedService) {
 		this.indebtedService = indebtedService;
+	}
+
+	public void setEmailService(EMailService emailService) {
+		this.emailService = emailService;
 	}
 	
 	

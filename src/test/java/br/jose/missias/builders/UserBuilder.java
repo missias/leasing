@@ -10,7 +10,6 @@ public class UserBuilder {
 		
 	}
 	
-	
 	public static UserBuilder aUser() {
 		UserBuilder builder = new UserBuilder();
 		builder.user = new User("User 1");
@@ -19,6 +18,11 @@ public class UserBuilder {
 	
 	public User now() {
 		return user;
+	}
+	
+	public UserBuilder withName(String name) {
+		this.user.setName(name);
+		return this;
 	}
 	
 }

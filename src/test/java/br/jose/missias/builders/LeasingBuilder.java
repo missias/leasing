@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import br.jose.missias.entities.Leasing;
+import br.jose.missias.entities.User;
 
 public class LeasingBuilder {
 	
@@ -32,8 +33,21 @@ public class LeasingBuilder {
 		builder.leasing.setValue(4.0);
 	}
 	
+	public LeasingBuilder withUser(User user) {
+		leasing.setUser(user);
+		return this;
+	}
+	
+	public LeasingBuilder withReturnDate(Date date) {
+		leasing.setReturnDate(date);
+		return this;
+		
+	}
+	
 	public Leasing now() {
 		return this.leasing;
 	}
+	
+	
 	
 }
