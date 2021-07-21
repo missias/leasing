@@ -7,16 +7,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import br.jose.missias.dao.LeasingDao;
 import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
 import br.jose.missias.entities.User;
 import br.jose.missias.exceptions.LeasingException;
 import br.jose.missias.exceptions.MovieWithoutStockException;
-import br.jose.missias.utils.DateUtils;
  
 
 public class LeasingService {
 	
+	
+	private LeasingDao dao;
  
 	public Leasing rentMovie(User user, List<Movie> movies) throws MovieWithoutStockException,  LeasingException{
 		
@@ -68,10 +70,13 @@ public class LeasingService {
 		
 		leasing.setReturnDate(returnDate);
 		
-		//Saving the location...
-		//TODO add method to save
+		dao.save(leasing);
 		
 		return leasing;
+	}
+
+	public void setDao(LeasingDao dao) {
+		this.dao = dao;
 	}
 
 	

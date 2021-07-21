@@ -14,8 +14,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.mockito.Mockito;
 
 import br.jose.missias.builders.MovieBuilder;
+import br.jose.missias.dao.LeasingDao;
 import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
 import br.jose.missias.entities.User;
@@ -46,6 +48,8 @@ public class CalculatorPriceRentTest {
 	@Before
 	public void setup() {
 		service = new LeasingService();
+		LeasingDao dao = Mockito.mock(LeasingDao.class);
+		service.setDao(dao);		
 	}
 	
 	private static Movie m1 = aMovie().now();

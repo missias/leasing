@@ -26,9 +26,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 
 import br.jose.missias.builders.MovieBuilder;
 import br.jose.missias.builders.UserBuilder;
+import br.jose.missias.dao.LeasingDao;
 import br.jose.missias.entities.Leasing;
 import br.jose.missias.entities.Movie;
 import br.jose.missias.entities.User;
@@ -55,6 +57,8 @@ public class LeasingServiceTest {
 	@Before
 	public void setup() {
 		service = new LeasingService();
+		LeasingDao dao = Mockito.mock(LeasingDao.class);
+		service.setDao(dao);
 	}
 
 	@After
